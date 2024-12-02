@@ -1,5 +1,6 @@
 package com.jonssonhector.aoc;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class Runner {
@@ -15,7 +16,7 @@ public class Runner {
 
         if (input == null) {
             var file = "/day%d.txt".formatted(day);
-            try (var resource = Runner.class.getResourceAsStream(file)) {
+            try (var resource = readFile(file)) {
                 if (resource == null) {
                     throw new IllegalArgumentException("Could not find resource %s".formatted(file));
                 }
@@ -30,28 +31,33 @@ public class Runner {
             |  Running (Day %d)  |
             ----------------------
             | Data: %s
-            ----------------------
             """, day, fromCli ? "From CLI" : "From file");
 
         var dayInstance = clazz.getDeclaredConstructor().newInstance();
         var s = System.currentTimeMillis();
-        var output = dayInstance.run(input);
-        var time = System.currentTimeMillis() - s;
 
-        System.out.printf("""
-            ---------------------
-            |  Output (Day %d)  |
-            ---------------------
-            Part1: %s
-            Part2: %s
-            Time taken: %dms
-            ---------------------
-            """,
-            day,
-            output.part1(),
-            output.part2(),
-            time
-        );
+        var p1Output = dayInstance.runPart1(input);
+        var p1Time = System.currentTimeMillis() - s;
+        System.out.printf("| Part 1 (took %dms): %s%n".formatted(p1Time, out(p1Output)));
+        var p2Output = dayInstance.runPart2(input);
+        var p2Time = System.currentTimeMillis() - s - p1Time;
+        System.out.printf("| Part 2 (took %dms): %s%n".formatted(p2Time, out(p2Output)));
+        System.out.printf("| Total time taken: %dms%n", p1Time + p2Time);
+        System.out.println("----------------------");
+    }
+
+    private static InputStream readFile(String file) {
+        var is = Runner.class.getResourceAsStream(file);
+        if (is != null) {
+            return is;
+        }
+
+        // Attempt to load from src/main/resources
+        return Runner.class.getClassLoader().getResourceAsStream("src/main/resources" + file);
+    }
+
+    private static String out(String output) {
+        return output == null ? "(No output)" : output;
     }
 
     @SuppressWarnings("unchecked")
