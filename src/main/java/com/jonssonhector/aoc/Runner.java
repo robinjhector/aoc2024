@@ -57,7 +57,7 @@ public class Runner {
     }
 
     private static String out(String output) {
-        return output == null ? "(No output)" : output;
+        return output == null || output.isBlank() ? "(No output)" : output;
     }
 
     @SuppressWarnings("unchecked")

@@ -18,4 +18,10 @@ public abstract class BaseProblem {
             .map(line -> line.split("\\s+"))
             .map(fn);
     }
+
+    protected static Function<String[], Integer[]> toIntArray() {
+        return arr -> Stream.of(arr)
+            .map(Integer::parseInt)
+            .toArray(Integer[]::new);
+    }
 }
