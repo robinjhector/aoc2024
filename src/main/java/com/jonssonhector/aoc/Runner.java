@@ -27,9 +27,9 @@ public class Runner {
         var clazz = loadClazz(day);
 
         System.out.printf("""
-            ----------------------
-            |  Running (Day %d)  |
-            ----------------------
+            ---------------------------------
+            |  Running (Day %d)              |
+            ---------------------------------
             | Data: %s
             """, day, fromCli ? "From CLI" : "From file");
 
@@ -43,7 +43,7 @@ public class Runner {
         var p2Time = System.currentTimeMillis() - s - p1Time;
         System.out.printf("| Part 2 (took %dms): %s%n".formatted(p2Time, out(p2Output)));
         System.out.printf("| Total time taken: %dms%n", p1Time + p2Time);
-        System.out.println("----------------------");
+        System.out.println("---------------------------------");
     }
 
     private static InputStream readFile(String file) {
