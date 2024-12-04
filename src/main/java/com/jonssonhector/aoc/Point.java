@@ -33,10 +33,6 @@ public record Point(int x, int y) implements Comparable<Point> {
         };
     }
 
-    public boolean inBounds(Grid grid) {
-        return x >= 0 && x < grid.width() && y >= 0 && y < grid.height();
-    }
-
     public Point[] adj3x3() {
         return new Point[] {
             move(Direction.NW), move(Direction.N), move(Direction.NE),

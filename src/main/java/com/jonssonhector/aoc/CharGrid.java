@@ -28,7 +28,7 @@ public record CharGrid(char[][] data) implements Grid {
     }
 
     public char get(Point point) {
-        if (point.inBounds(this)) {
+        if (contains(point)) {
             return data[point.y()][point.x()];
         }
 
@@ -40,7 +40,7 @@ public record CharGrid(char[][] data) implements Grid {
         var point = starting;
 
         for (int i = 0; i < maxLen; i++) {
-            if (point.inBounds(this)) {
+            if (contains(point)) {
                 sb.append(get(point));
                 point = point.move(direction);
             } else {
@@ -52,7 +52,12 @@ public record CharGrid(char[][] data) implements Grid {
     }
 
     public boolean contains(Point point) {
-        return point.inBounds(this);
+        return point.x() >= 0 && point.x() < width() &&
+            point.y() >= 0 && point.y() < height();
+    }
+
+    public boolean containsAll(Point[] subGrid) {
+        return Stream.of(subGrid).allMatch(this::contains);
     }
 
     public Point ltrNextPoint(Point current) {
@@ -97,9 +102,5 @@ public record CharGrid(char[][] data) implements Grid {
     @Override
     public int height() {
         return data.length;
-    }
-
-    public boolean containsAll(Point[] subGrid) {
-        return Stream.of(subGrid).allMatch(this::contains);
     }
 }
