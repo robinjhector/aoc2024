@@ -1,5 +1,9 @@
 package com.jonssonhector.aoc;
 
+import com.jonssonhector.aoc.util.CharGrid;
+import com.jonssonhector.aoc.util.Direction;
+import com.jonssonhector.aoc.util.Point;
+
 public class Day4 extends BaseProblem {
 
     @Override

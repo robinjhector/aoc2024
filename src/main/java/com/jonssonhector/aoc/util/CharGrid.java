@@ -1,4 +1,4 @@
-package com.jonssonhector.aoc;
+package com.jonssonhector.aoc.util;
 
 import java.util.stream.Stream;
 
