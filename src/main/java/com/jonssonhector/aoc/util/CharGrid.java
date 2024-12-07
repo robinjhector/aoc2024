@@ -35,6 +35,18 @@ public record CharGrid(char[][] data) implements Grid {
         throw new IllegalArgumentException("Point out of bounds: " + point);
     }
 
+    public Point find(char c) {
+        for (int y = 0; y < height(); y++) {
+            for (int x = 0; x < width(); x++) {
+                if (data[y][x] == c) {
+                    return new Point(x, y);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Character not found: " + c);
+    }
+
     public String extractRange(Point starting, Direction direction, int maxLen) {
         var sb = new StringBuilder();
         var point = starting;
