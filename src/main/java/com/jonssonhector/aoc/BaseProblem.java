@@ -31,6 +31,12 @@ public abstract class BaseProblem {
             .map(fn);
     }
 
+    protected <T> Stream<T> splitLinesOnColon(String input, Function<String[], T> fn) {
+        return lines(input)
+            .map(line -> line.split(":"))
+            .map(fn);
+    }
+
     protected static Function<String[], Integer[]> toIntArray() {
         return arr -> Stream.of(arr)
             .map(Integer::parseInt)
