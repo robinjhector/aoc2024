@@ -1,5 +1,7 @@
 package com.jonssonhector.aoc.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public record CharGrid(char[][] data) implements Grid {
@@ -45,6 +47,19 @@ public record CharGrid(char[][] data) implements Grid {
         }
 
         throw new IllegalArgumentException("Character not found: " + c);
+    }
+
+    public List<Point> findAll(char c) {
+        var points = new ArrayList<Point>();
+        for (int y = 0; y < height(); y++) {
+            for (int x = 0; x < width(); x++) {
+                if (data[y][x] == c) {
+                    points.add(new Point(x, y));
+                }
+            }
+        }
+
+        return points;
     }
 
     public String extractRange(Point starting, Direction direction, int maxLen) {
@@ -114,5 +129,14 @@ public record CharGrid(char[][] data) implements Grid {
     @Override
     public int height() {
         return data.length;
+    }
+
+    public void set(Point point, char c) {
+        if (contains(point)) {
+            data[point.y()][point.x()] = c;
+            return;
+        }
+
+        throw new IllegalArgumentException("Point out of bounds: " + point);
     }
 }
