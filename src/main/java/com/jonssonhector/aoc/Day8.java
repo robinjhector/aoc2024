@@ -3,31 +3,21 @@ package com.jonssonhector.aoc;
 import com.jonssonhector.aoc.util.CharGrid;
 import com.jonssonhector.aoc.util.Point;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 public class Day8 extends BaseProblem {
 
     @Override
     public String runPart1(String input) {
         var grid = CharGrid.parse(input);
-        var map = new HashMap<Character, List<Point>>();
+        var map = grid.pointsPerCharacter();
 
-        for (int y = 0; y < grid.data().length; y++) {
-            char[] row = grid.data()[y];
-            for (int x = 0; x < row.length; x++) {
-                char c = row[x];
-                if (c == '.' || map.containsKey(c)) {
-                    continue;
-                }
-
-                map.put(c, grid.findAll(c));
-            }
-        }
-
-        var antinodes = new HashSet<Point>();
+        var antiNodes = new HashSet<Point>();
         for (var c : map.keySet()) {
+            if (c == '.') {
+                continue;
+            }
+
             var points = map.get(c);
             for (var p1 : points) {
                 for (var p2 : points) {
@@ -41,39 +31,32 @@ public class Day8 extends BaseProblem {
                     );
 
                     if (grid.contains(p3)) {
+                        // Just for visualization
                         grid.set(p3, '#');
-                        antinodes.add(p3);
+                        antiNodes.add(p3);
                     }
                 }
 
             }
         }
 
-        return String.valueOf(antinodes.size());
+        return String.valueOf(antiNodes.size());
     }
 
     @Override
     public String runPart2(String input) {
         var grid = CharGrid.parse(input);
-        var map = new HashMap<Character, List<Point>>();
+        var map = grid.pointsPerCharacter();
 
-        for (int y = 0; y < grid.data().length; y++) {
-            char[] row = grid.data()[y];
-            for (int x = 0; x < row.length; x++) {
-                char c = row[x];
-                if (c == '.' || map.containsKey(c)) {
-                    continue;
-                }
-
-                map.put(c, grid.findAll(c));
-            }
-        }
-
-        var antinodes = new HashSet<Point>();
+        var antiNodes = new HashSet<Point>();
         for (var c : map.keySet()) {
+            if (c == '.') {
+                continue;
+            }
+
             var points = map.get(c);
             if (points.size() > 1) {
-                antinodes.addAll(points);
+                antiNodes.addAll(points);
             }
             for (var p1 : points) {
                 for (var p2 : points) {
@@ -87,11 +70,12 @@ public class Day8 extends BaseProblem {
                     );
 
                     while (grid.contains(p3)) {
+                        // Just for visualization
                         if (grid.get(p3) == '.') {
                             grid.set(p3, '#');
                         }
 
-                        antinodes.add(p3);
+                        antiNodes.add(p3);
 
                         p3 = new Point(
                             p3.x() + (p2.x() - p1.x()),
@@ -103,6 +87,6 @@ public class Day8 extends BaseProblem {
             }
         }
 
-        return String.valueOf(antinodes.size());
+        return String.valueOf(antiNodes.size());
     }
 }

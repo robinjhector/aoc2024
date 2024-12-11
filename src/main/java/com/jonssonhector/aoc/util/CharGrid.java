@@ -1,7 +1,10 @@
 package com.jonssonhector.aoc.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public record CharGrid(char[][] data) implements Grid {
@@ -32,6 +35,19 @@ public record CharGrid(char[][] data) implements Grid {
     public char get(Point point) {
         if (contains(point)) {
             return data[point.y()][point.x()];
+        }
+
+        throw new IllegalArgumentException("Point out of bounds: " + point);
+    }
+
+    public int getInt(Point point) {
+        if (contains(point)) {
+            var c = data[point.y()][point.x()];
+            if (c >= '0' && c <= '9') {
+                return c - '0';
+            } else {
+                return -1;
+            }
         }
 
         throw new IllegalArgumentException("Point out of bounds: " + point);
@@ -76,6 +92,28 @@ public record CharGrid(char[][] data) implements Grid {
         }
 
         return sb.toString();
+    }
+
+    public Map<Character, List<Point>> pointsPerCharacter() {
+        var map = new HashMap<Character, List<Point>>();
+        for (int y = 0; y < data.length; y++) {
+            char[] row = data[y];
+            for (int x = 0; x < row.length; x++) {
+                char c = row[x];
+                var points = map.computeIfAbsent(c, k -> new ArrayList<>());
+                points.add(new Point(x, y));
+            }
+        }
+
+        return map;
+    }
+
+    public void forEach(Consumer<Point> point) {
+        for (int y = 0; y < height(); y++) {
+            for (int x = 0; x < width(); x++) {
+                point.accept(new Point(x, y));
+            }
+        }
     }
 
     public boolean contains(Point point) {
