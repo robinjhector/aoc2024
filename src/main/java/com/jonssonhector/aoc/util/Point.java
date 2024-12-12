@@ -1,5 +1,7 @@
 package com.jonssonhector.aoc.util;
 
+import java.util.Comparator;
+
 public record Point(int x, int y) implements Comparable<Point> {
 
     public static Point ZERO = new Point(0, 0);
@@ -49,8 +51,22 @@ public record Point(int x, int y) implements Comparable<Point> {
         };
     }
 
+    public boolean isAdjacentVH(Point other) {
+        if (x == other.x()) {
+            return Math.abs(y - other.y()) == 1;
+        } else if (y == other.y()) {
+            return Math.abs(x - other.x()) == 1;
+        }
+
+        return false;
+    }
+
     @Override
     public int compareTo(Point o) {
         return distance(o);
+    }
+
+    public static Comparator<Point> compareByYX() {
+        return Comparator.comparing(Point::y).thenComparing(Point::x);
     }
 }
