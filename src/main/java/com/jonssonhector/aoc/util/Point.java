@@ -6,12 +6,34 @@ public record Point(int x, int y) implements Comparable<Point> {
 
     public static Point ZERO = new Point(0, 0);
 
+    public static Point fromCsv(String csv) {
+        var parts = csv.split(",");
+        return new Point(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+    }
+
     public static Point fromIntArr(Integer[] integers) {
         if (integers.length != 2) {
             throw new IllegalArgumentException("Array must have length 2");
         }
 
         return new Point(integers[0], integers[1]);
+    }
+
+    public Point wrapAround(Point max) {
+        return new Point(
+            wrapAround(x, max.x()),
+            wrapAround(y, max.y())
+        );
+    }
+
+    private static int wrapAround(int value, int max) {
+        while (value < 0) {
+            value += max;
+        }
+        while (value >= max) {
+            value -= max;
+        }
+        return value;
     }
 
     public Point dx(int dx) {

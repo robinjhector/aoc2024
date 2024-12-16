@@ -1,6 +1,7 @@
 package com.jonssonhector.aoc.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,15 @@ public record CharGrid(char[][] data) implements Grid {
         return new CharGrid(input.lines()
             .map(String::toCharArray)
             .toArray(char[][]::new));
+    }
+
+    public static CharGrid fill(int x, int y, char c) {
+        var data = new char[y][x];
+        for (var row : data) {
+            Arrays.fill(row, c);
+        }
+
+        return new CharGrid(data);
     }
 
     public char get(Point point) {
@@ -137,23 +147,42 @@ public record CharGrid(char[][] data) implements Grid {
 
     @Override
     public String toString() {
+        var xPadding = String.valueOf(width() - 1).length();
+        var yPadding = String.valueOf(height() - 1).length();
+
         var sb = new StringBuilder();
-        var x = 0;
-        var y = 0;
-        sb.append("  ");
-        for (var c : data[0]) {
-            sb.append(x).append(" ");
-            x++;
+
+        for (int row = 0; row < xPadding; row++) {
+            sb.append(" ".repeat(yPadding + 1)); // Padding for the row indices (left side)
+            for (int col = 0; col < width(); col++) {
+                var colStr = String.valueOf(col);
+                char c = (row < colStr.length()) ? colStr.charAt(row) : ' ';
+                sb.append(c).append(" ");
+            }
+            sb.append("\n");
         }
-        sb.append("\n");
+
+        var y = 0;
         for (var row : data) {
-            sb.append(y).append(" ");
+            sb.append(y).append(" ".repeat(yPadding - String.valueOf(y).length() + 1));
             for (var c : row) {
                 sb.append(c);
                 sb.append(" ");
             }
             sb.append("\n");
             y++;
+        }
+
+        return sb.toString();
+    }
+
+    public String toCompactString() {
+        var sb = new StringBuilder();
+        for (var row : data) {
+            for (var c : row) {
+                sb.append(c);
+            }
+            sb.append("\n");
         }
 
         return sb.toString();

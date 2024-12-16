@@ -2,7 +2,6 @@ package com.jonssonhector.aoc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day9 extends BaseProblem {
 
@@ -24,37 +23,8 @@ public class Day9 extends BaseProblem {
             isFreeSpace = !isFreeSpace;
         }
 
-        var freeSpace = blocks.stream()
-            .filter(DiskBlock::freeSpace)
-            .collect(Collectors.toCollection(ArrayList::new));
-        var organized = new ArrayList<>(blocks);
+        System.out.println(toStringChars(blocks));
 
-        for (int i = blocks.size() - 1; i >= 0; i--) {
-            if (freeSpace.isEmpty()) {
-                // Out of free space
-                break;
-            }
-
-            var targetPos = blocks.size() - i - 1;
-            var block = blocks.get(i);
-            var toMove = block.size();
-
-            var freeBlock = freeSpace.getFirst();
-            if (freeBlock.fitsExactly(block)) {
-                organized.set(targetPos, freeBlock);
-                freeSpace.removeFirst();
-            } else {
-                if (freeBlock.size() > toMove) {
-                    organized.set(targetPos, new DiskBlock(block.id, toMove, false));
-                    freeSpace.set(0, new DiskBlock(-1, freeBlock.size() - toMove, true));
-                } else {
-                    organized.set(targetPos, freeBlock);
-                    freeSpace.removeFirst();
-                }
-            }
-        }
-
-        System.out.println(toStringChars(organized));
         return "";
     }
 
@@ -69,7 +39,7 @@ public class Day9 extends BaseProblem {
             if (block.freeSpace) {
                 sb.append(".".repeat(block.size));
             } else {
-                sb.append(("" + block.id).repeat(block.size));
+                sb.append(("[" + block.id + "]").repeat(block.size));
             }
         }
 
@@ -77,12 +47,5 @@ public class Day9 extends BaseProblem {
     }
 
     record DiskBlock(long id, int size, boolean freeSpace) {
-        public boolean fitsExactly(DiskBlock otherBlock) {
-            if (!freeSpace) {
-                throw new IllegalArgumentException("This block is not free space");
-            }
-
-            return size == otherBlock.size;
-        }
     }
 }
