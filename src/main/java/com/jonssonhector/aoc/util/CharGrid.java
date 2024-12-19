@@ -3,9 +3,11 @@ package com.jonssonhector.aoc.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public record CharGrid(char[][] data) implements Grid {
@@ -102,6 +104,36 @@ public record CharGrid(char[][] data) implements Grid {
         }
 
         return sb.toString();
+    }
+
+    public String extractUntilNext(Point starting, Direction direction, char... checkChars) {
+        var sb = new StringBuilder();
+        var point = starting;
+        var found = false;
+        var cc = new HashSet<Character>();
+        for (var c : checkChars) {
+            cc.add(c);
+        }
+
+        while (!found && contains(point)) {
+            var c = get(point);
+            if (cc.contains(c)) {
+                found = true;
+            } else {
+                sb.append(c);
+                point = point.move(direction);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public void setRange(Point starting, Direction direction, String range) {
+        var point = starting;
+        for (var c : range.toCharArray()) {
+            set(point, c);
+            point = point.move(direction);
+        }
     }
 
     public Map<Character, List<Point>> pointsPerCharacter() {

@@ -10,6 +10,18 @@ public enum Direction {
     W,
     NW;
 
+    public boolean vertical() {
+        return this == N || this == S;
+    }
+
+    public boolean horizontal() {
+        return this == E || this == W;
+    }
+
+    public boolean diagonal() {
+        return !vertical() && !horizontal();
+    }
+
     public Direction opposite() {
         return switch (this) {
             case N -> S;
