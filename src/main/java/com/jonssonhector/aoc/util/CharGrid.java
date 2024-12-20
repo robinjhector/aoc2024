@@ -2,12 +2,12 @@ package com.jonssonhector.aoc.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public record CharGrid(char[][] data) implements Grid {
@@ -228,6 +228,10 @@ public record CharGrid(char[][] data) implements Grid {
     @Override
     public int height() {
         return data.length;
+    }
+
+    public void setAll(Collection<Point> points, char c) {
+        points.forEach(p -> set(p, c));
     }
 
     public void set(Point point, char c) {

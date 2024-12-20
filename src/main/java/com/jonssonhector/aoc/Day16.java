@@ -1,5 +1,6 @@
 package com.jonssonhector.aoc;
 
+import com.jonssonhector.aoc.util.AStar;
 import com.jonssonhector.aoc.util.CharGrid;
 import com.jonssonhector.aoc.util.Direction;
 
@@ -12,26 +13,20 @@ public class Day16 extends BaseProblem {
 
         var start = map.find('S');
         var end = map.find('E');
-        var minScore = Integer.MAX_VALUE;
-        var score = 0;
 
-        var currPoint = start;
-//        while (true) {
-//            var next = map.get(direction.move());
-//            if (next == ' ') {
-//                break;
-//            }
-//
-//            if (next == '+') {
-//                direction = direction.turn(map.get(direction.turnLeft()) == ' ');
-//            } else if (next >= 'A' && next <= 'Z') {
-//                score++;
-//            }
-//
-//            score++;
-//        }
+        var aStar = new AStar(map)
+            .setImpassableChar('#')
+            .setStepCost(1)
+            .setTurnCost(1000);
 
-        return "";
+        System.out.println(map);
+        var result = aStar.findPath(start, end, direction);
+        map.setAll(result.path(), '█');
+        map.set(start, 'S');
+        map.set(end, 'E');
+        System.out.println(map);
+
+        return String.valueOf(result.totalCost());
     }
 
     @Override
